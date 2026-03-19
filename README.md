@@ -61,9 +61,6 @@ Some settings are not forced automatically and instead ask the user for confirma
 - Do Not Disturb configuration
 - Debloater launch
 
-### Small simulated wait times
-A small random delay between steps makes execution feel less abrupt and improves readability while the script runs.
-
 ### Clean terminal output
 The script prints structured status messages to show what is happening during execution.
 
