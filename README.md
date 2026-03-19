@@ -29,7 +29,12 @@ The current implementation includes:
 - Optional prompt to enable **System Protection**
 - Optional prompt to enable **Clipboard History**
 - Optional prompt to open **Do Not Disturb / Notifications settings**
+- Optional creation of a **BIOS recommendations text file** on the desktop
+- Optional prompt to open **Ninite** for bulk app installation
 - Optional prompt to launch the **Raphire Debloater**
+- A separate **verification script** for manually checking applied settings through the relevant Windows pages
+
+The script is intentionally interactive for selected settings so the user can decide case by case during execution.
 
 The script is intentionally interactive for selected settings so the user can decide case by case during execution.
 
@@ -103,6 +108,8 @@ Instead, it is started optionally through its official quick-launch command:
 ```powershell
 & ([scriptblock]::Create((irm "https://debloat.raphi.re/")))
 ```
+Ninite is not bundled with this repository.  
+If selected by the user, the script simply opens the official website in the browser:
 
 ## BIOS Change Disclaimer
 
