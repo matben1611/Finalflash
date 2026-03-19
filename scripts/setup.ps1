@@ -109,6 +109,123 @@ function Set-StringValue {
     Write-Ok "$Path -> $Name = $Value"
 }
 
+function Create-BiosRecommendationsFileIfWanted {
+    Write-Host ""
+    $createBiosFile = Read-YesNo -Prompt "Do you want to create a BIOS recommendations file on the desktop"
+
+    if ($createBiosFile) {
+        $desktopPath = [Environment]::GetFolderPath('Desktop')
+        $filePath = Join-Path $desktopPath 'bios-recommendations.txt'
+
+        $content = @"
+Recommended BIOS Settings
+=========================
+
+- Enable EXPO/XMP
+  Enables the rated memory speed and timings instead of slow default JEDEC values.
+
+- Enable Resizable BAR
+  Can improve GPU performance and is generally recommended on modern gaming systems.
+
+- Disable CSM
+  Ensures proper UEFI boot behavior and avoids legacy compatibility issues.
+
+- Check Secure Boot
+  Recommended for a modern Windows setup and required by some security features.
+
+- Enable TPM / fTPM
+  Required for Windows 11 features and useful for security-related functionality.
+
+- Check SATA / NVMe configuration
+  Make sure storage devices are detected correctly and running in the intended mode.
+
+- Configure fan curves
+  Helps balance temperatures and noise levels for daily use.
+
+- Disable iGPU if not needed
+  Can simplify the system configuration on builds that only use a dedicated graphics card.
+
+- Enable Memory Context Restore only if the system remains stable
+  Can reduce boot times, but may cause memory instability on some systems.
+
+- Review X3D-specific recommendations
+  X3D CPUs often perform best with sensible stock-like settings instead of aggressive tuning.
+
+PBO / Curve Optimizer
+=====================
+
+IMPORTANT DISCLAIMER
+--------------------
+PBO and Curve Optimizer are not guaranteed-safe "set and forget" settings.
+Even if a system boots and seems fine in games, unstable values can still cause:
+- random crashes
+- WHEA errors
+- corrupted installs or files
+- game instability
+- rare idle or sleep crashes
+
+Every CPU is different.
+A value that works on one chip can be unstable on another.
+If you do not want to test stability properly, leave these settings at stock.
+
+Recommended conservative starting points
+----------------------------------------
+These are not maximum-performance values.
+They are only reasonable starting points for light tuning.
+
+PBO:
+- Precision Boost Overdrive = Enabled or Advanced
+- PBO Limits = Motherboard or Auto
+- Scalar = Auto
+- Max CPU Boost Clock Override = 0 MHz
+- Thermal Limit = Auto
+
+Curve Optimizer:
+- Curve Optimizer Mode = Negative
+- Start with:
+  - All Cores = Negative 10
+
+If stable, you can cautiously try:
+- All Cores = Negative 15
+
+Only if the system is known to be very stable:
+- Best cores = Negative 5 to 10
+- Other cores = Negative 10 to 20
+
+Safe recommendation for most users
+----------------------------------
+If you want a simple baseline:
+- PBO = Enabled
+- Curve Optimizer = Negative 10 on all cores
+- Boost Override = 0 MHz
+- Scalar = Auto
+
+For X3D CPUs
+------------
+Be extra conservative on X3D CPUs.
+A very reasonable baseline is:
+- PBO = Enabled
+- Curve Optimizer = Negative 10 all-core
+- no extra boost override
+- leave the rest on Auto unless you really know what you are doing
+
+If you notice crashes, stutter, WHEA errors, failed boots, or strange behavior:
+- set Curve Optimizer closer to 0
+- disable PBO tuning
+- return to stock settings
+
+"@
+
+        Set-Content -Path $filePath -Value $content -Encoding UTF8
+        Write-Ok "BIOS recommendations file created: $filePath"
+    }
+    else {
+        Write-Info "BIOS recommendations file was not created."
+    }
+
+    Write-Host ""
+}
+
 function Set-OptionalDiagnosticDataOff {
     Write-Host ""
     Write-Info "Disabling optional diagnostic data..."
@@ -323,6 +440,12 @@ try {
     Write-Host ""
 
     Wait-A-Bit
+    Wait-A-Bit
+
+    Create-BiosRecommendationsFileIfWanted
+
+    Wait-A-Bit
+
     Set-HardwareAcceleratedGpuSchedulingOn
 
     Wait-A-Bit
