@@ -95,10 +95,3 @@ These settings depend on user input:
 ---
 
 ## Project structure
-
-A minimal structure for this repository can look like this:
-
-```text
-.
-├── setup.ps1
-└── README.md
