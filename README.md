@@ -5,6 +5,8 @@
 # afterflash
 Windows PowerShell setup script for quickly applying post-build system tweaks, performance settings, and optional debloat actions on a fresh PC. Built out of my personal interest in PC building and optimization, with the goal of saving time and reducing repetitive setup work after each build.
 
+This serves as a personal documentation base for my own builds and related projects, and I plan to continue expanding it over time.
+
 # Windows Post-Build Setup Script
 
 A PowerShell-based post-build setup script for freshly installed Windows systems.
