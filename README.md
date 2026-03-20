@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="afterflash logo" width="500">
+  <img src="assets/logo.png" alt="afterflash.png" width="500">
 </p>
 
 # Afterflash
