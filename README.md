@@ -25,6 +25,9 @@ This script helps reduce that repetitive work by applying predefined system chan
 
 The current implementation includes:
 
+- Opening Ninite Website
+- Opening relating driver download sites for AMD/NVIDIA
+- Creating png with tipps for Bios/Uefi tuning for gaming and benchmark perfomance
 - Enabling **Hardware-Accelerated GPU Scheduling**
 - Disabling **Variable Refresh Rate**
 - Disabling **Game Mode**
