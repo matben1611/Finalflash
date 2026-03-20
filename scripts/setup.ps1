@@ -176,8 +176,8 @@ They are only reasonable starting points for light tuning.
 PBO:
 - Precision Boost Overdrive = Enabled or Advanced
 - PBO Limits = Motherboard or Auto
-- Scalar = Auto
-- Max CPU Boost Clock Override = 0 MHz
+- Scalar = Auto or 1-10 -> higher values can cause stability issues
+- Max CPU Boost Clock Override = 0 MHz or try 200MHz for maxmimum performance
 - Thermal Limit = Auto
 
 Curve Optimizer:
@@ -186,7 +186,7 @@ Curve Optimizer:
   - All Cores = Negative 10
 
 If stable, you can cautiously try:
-- All Cores = Negative 15
+- All Cores = Negative 15-30
 
 Only if the system is known to be very stable:
 - Best cores = Negative 5 to 10
