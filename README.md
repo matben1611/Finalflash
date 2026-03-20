@@ -164,6 +164,8 @@ Some of these changes can improve performance, boot times, temperatures, or nois
 - sleep / idle instability
 - rare data corruption
 
+---
+
 > ## ⚠️ BIOS WARNING
 > **Do not change BIOS settings unless you understand what they do and are willing to test system stability properly afterward.**  
 >  
