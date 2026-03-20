@@ -2,7 +2,7 @@
   <img src="afterflash.png" alt="afterflash.png" width="500">
 </p>
 
-# Afterflash
+# afterflash
 Windows PowerShell setup script for quickly applying post-build system tweaks, performance settings, and optional debloat actions on a fresh PC.
 
 # Windows Post-Build Setup Script
