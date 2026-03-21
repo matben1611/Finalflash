@@ -79,6 +79,78 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Get-ChildItem -Path . -Filter *.ps1 -Recurse | Unblock-File
 ```
 
+## Quick Start
+
+1. **Clone or download** this repository to your PC
+2. **Open PowerShell** (no admin required, script will prompt for elevation)
+3. **Navigate** to the repository directory
+4. **Run** the setup script:
+
+```powershell
+.\scripts\setup.ps1
+```
+
+The script will guide you through each configuration step with interactive
+prompts for optional settings.
+
+## Requirements
+
+- **Windows 10** or **Windows 11**
+- **PowerShell 5.0+** (comes pre-installed on Windows 10/11)
+- **Administrator privileges** (script will request elevation)
+
+## Usage
+
+### Main Setup Script
+
+Run the main optimization script:
+
+```powershell
+.\scripts\setup.ps1
+```
+
+### Verification Script
+
+After running the setup, use the verification script to manually check
+that all settings were applied correctly:
+
+```powershell
+.\scripts\verify.ps1
+```
+
+This script opens relevant Windows settings pages without making changes.
+
+## Development
+
+### Running Tests
+
+Tests are written with [Pester 5.x](https://pester.dev/):
+
+```powershell
+Remove-Module Pester -Force -ErrorAction SilentlyContinue
+Invoke-Pester -Path ./tests -PassThru
+```
+
+### Code Analysis
+
+The project uses PSScriptAnalyzer for code quality:
+
+```powershell
+Invoke-ScriptAnalyzer -Path ./scripts -Recurse `
+  -Settings ./scripts/PSScriptAnalyzerSettings.psd1
+```
+
+## License
+
+This project is licensed under the
+[MIT License](LICENSE) - see the LICENSE file for details.
+
+## Acknowledgments
+
+- **Win11Debloat** by Raphire for debloating functionality
+- **Ninite** for bulk application installation support
+- Community feedback and contributions
+
 ## Features
 
 ### Automatic elevation

@@ -1,1 +1,24 @@
+# Generated files
 bios-recommendations.txt
+
+# PowerShell
+*.ps1xml
+*.psc1
+*.psd1
+
+# IDE
+.vscode/
+*.code-workspace
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Node modules (if using markdown tools)
+node_modules/
+
+# Backup files
+*.bak
+*.tmp
+*~

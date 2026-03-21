@@ -1,0 +1,23 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# PowerShell files
+*.ps1 text eol=lf
+*.psd1 text eol=lf
+*.psm1 text eol=lf
+
+# Markdown files
+*.md text eol=lf
+
+# JSON files
+*.json text eol=lf
+
+# YAML files
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
