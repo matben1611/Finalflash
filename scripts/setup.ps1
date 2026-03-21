@@ -350,7 +350,7 @@ function Set-HardwareAcceleratedGpuSchedulingOn {
 
     if ($enableGpuScheduling) {
         Write-Info "Enabling hardware-accelerated GPU scheduling..."
-        
+
         Set-DwordValue `
             -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' `
             -Name 'HwSchMode' `
@@ -515,7 +515,9 @@ function Show-SystemInformation {
         $cpu = Get-CimInstance Win32_Processor |
             Select-Object -First 1 -ExpandProperty Name
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve CPU information"
+    }
 
     try {
         $gpuList = Get-CimInstance Win32_VideoController |
@@ -529,7 +531,9 @@ function Show-SystemInformation {
             $gpu = "Unknown"
         }
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve GPU information"
+    }
 
     try {
         $memoryModules = Get-CimInstance Win32_PhysicalMemory
@@ -555,7 +559,9 @@ function Show-SystemInformation {
             $ramSpeed = "$ramSpeedValue MT/s"
         }
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve RAM information"
+    }
 
     try {
         $baseBoard = Get-CimInstance Win32_BaseBoard | Select-Object -First 1
@@ -578,7 +584,9 @@ function Show-SystemInformation {
             $mainboardName = "Not reported"
         }
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve mainboard information"
+    }
 
     try {
         $bios = Get-CimInstance Win32_BIOS | Select-Object -First 1
@@ -590,7 +598,9 @@ function Show-SystemInformation {
             $biosVersion = $bios.Version
         }
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve BIOS information"
+    }
 
     try {
         $os = Get-CimInstance Win32_OperatingSystem | Select-Object -First 1
@@ -610,7 +620,9 @@ function Show-SystemInformation {
             $osType = $os.OSArchitecture
         }
     }
-    catch {}
+    catch {
+        Write-Verbose "Unable to retrieve OS information"
+    }
 
     Write-Host ("{0,-20}: {1}" -f "CPU", $cpu)
     Write-Host ("{0,-20}: {1}" -f "GPU", $gpu)

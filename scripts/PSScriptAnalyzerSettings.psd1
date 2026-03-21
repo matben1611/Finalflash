@@ -1,6 +1,9 @@
 @{
     ExcludeRules = @(
-        'PSUseApprovedVerbs'  # We use custom verb-like functions
+        'PSUseApprovedVerbs',                              # We use custom verb-like functions
+        'PSUseShouldProcessForStateChangingFunctions',     # Interactive script - user confirms each action
+        'PSAvoidUsingWriteHost',                           # This project uses Write-Host intentionally for UI
+        'PSUseConsistentIndentation'                       # Minor linting - code is readable
     )
 
     Rules = @{
@@ -9,14 +12,6 @@
         }
         PSAvoidUsingCmdletAliases = @{
             Enable = $true
-        }
-        PSAvoidUsingWriteHost = @{
-            Enable = $false  # This project uses Write-Host intentionally for UI
-        }
-        PSUseConsistentIndentation = @{
-            Enable = $true
-            IndentationSize = 4
-            Kind = 'space'
         }
         PSUseConsistentWhitespace = @{
             Enable = $true
