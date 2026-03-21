@@ -178,7 +178,7 @@ Generated:   $timestamp
 
 
 RECOMMENDED BIOS SETTINGS
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 
 [EXPO/XMP MEMORY PROFILE]
   Enable this setting to run your memory at the manufacturer's rated speed
@@ -231,10 +231,10 @@ RECOMMENDED BIOS SETTINGS
 
 
 ADVANCED TUNING: PBO & CURVE OPTIMIZER
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 
 !!! IMPORTANT DISCLAIMER !!!
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 PBO and Curve Optimizer are NOT guaranteed-safe "set and forget" settings!
 
 Even if your system boots and performs well in games initially, unstable values
@@ -249,11 +249,11 @@ Every CPU is unique due to manufacturing variation. A setting that works on one
 chip can be unstable on another, even from the same batch.
 
 IF YOU DON'T WANT TO TEST STABILITY THOROUGHLY, LEAVE THESE AT STOCK DEFAULTS.
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 
 
 CONSERVATIVE RECOMMENDED BASELINE
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 
 These settings are NOT maximum performance - they are safe starting points
 for light tuning that most systems should handle:
@@ -278,7 +278,7 @@ Only if proven stable:
 
 
 SPECIAL: X3D CPUs (Ryzen 7/5 X3D)
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 X3D CPUs already have large 3D V-Cache and work best with minimal tuning:
 
 Conservative recommendation:
@@ -294,7 +294,7 @@ If your X3D system becomes unstable (crashes, WHEA errors, game crashes):
 
 
 HOW TO TEST STABILITY
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 1. Make BIOS changes one at a time
 2. Run system normally for 1-2 weeks
 3. Watch for crashes, WHEA errors, or game instability
@@ -303,13 +303,13 @@ HOW TO TEST STABILITY
 
 
 FINDING WHEA ERRORS
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 Windows Event Viewer > Windows Logs > System > Look for "WHEA-Logger" errors.
 Multiple WHEA errors = your overclock/tuning isn't stable enough.
 
 
 FINAL ADVICE
-─────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 * When in doubt, use stock settings
 * Stability is more important than +5% performance
 * Test thoroughly before trusting your system
