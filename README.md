@@ -6,29 +6,40 @@
   <img src="afterflash.png" alt="afterflash.png" width="500">
 </p>
 
-Windows PowerShell setup script for quickly applying post-build system tweaks, performance settings, and optional debloat actions on a fresh PC. Built out of my personal interest in PC building and optimization, with the goal of saving time and reducing repetitive setup work after each build.
+Windows PowerShell setup script for quickly applying post-build system tweaks,
+performance settings, and optional debloat actions on a fresh PC. Built out of
+my personal interest in PC building and optimization, with the goal of saving
+time and reducing repetitive setup work after each build.
 
-This serves as a personal documentation base for my own builds and related projects, and I plan to continue expanding it over time.
+This serves as a personal documentation base for my own builds and related
+projects, and I plan to continue expanding it over time.
 
 ## Windows Post-Build Setup Script
 
-A PowerShell-based post-build setup script for freshly installed Windows systems.
+A PowerShell-based post-build setup script for freshly installed
+Windows systems.
 
-This project automates a small set of useful Windows configuration changes after building or setting up a PC.  
-It is designed to be simple, interactive, and easy to extend without requiring a graphical user interface.
+This project automates a small set of useful Windows configuration
+changes after building or setting up a PC.  
+It is designed to be simple, interactive, and easy to extend without
+requiring a graphical user interface.
 
-The script currently focuses on a few performance-related and quality-of-life settings, optional prompts for selected features, and the ability to launch an external debloater at the end.
+The script currently focuses on a few performance-related and
+quality-of-life settings, optional prompts for selected features, and
+the ability to launch an external debloater at the end.
 
 ## Overview
 
-After a fresh Windows installation, many users manually change the same settings over and over again.  
-This script helps reduce that repetitive work by applying predefined system changes through PowerShell.
+After a fresh Windows installation, many users manually change the same
+settings over and over again. This script helps reduce that repetitive work
+by applying predefined system changes through PowerShell.
 
 The current implementation includes:
 
 - Overview to most important system components
 - Opening relating driver download sites for AMD/NVIDIA
-- Creating png with tipps for Bios/Uefi tuning for gaming and benchmark perfomance
+- Creating png with tipps for Bios/Uefi tuning for gaming and
+  benchmark perfomance
 - Enabling **Hardware-Accelerated GPU Scheduling**
 - Disabling **Variable Refresh Rate**
 - Disabling **Game Mode**
@@ -38,13 +49,17 @@ The current implementation includes:
 - Restricting **Delivery Optimization**
 - Optional prompt to enable **System Protection**
 - Optional prompt to enable **Clipboard History**
-- Optional prompt to open **Do Not Disturb / Notifications settings**
-- Optional creation of a **BIOS recommendations text file** on the desktop
+- Optional prompt to open **Do Not Disturb / Notifications
+  settings**
+- Optional creation of a **BIOS recommendations text file** on
+  the desktop
 - Optional prompt to open **Ninite** for bulk app installation
 - Optional prompt to launch the **Raphire Debloater**
-- A separate **verification script** for manually checking applied settings through the relevant Windows pages
+- A separate **verification script** for manually checking applied
+  settings through the relevant Windows pages
 
-The script is intentionally interactive for selected settings so the user can decide case by case during execution.
+The script is intentionally interactive for selected settings so the
+user can decide case by case during execution.
 
 ## Goals
 
@@ -68,12 +83,14 @@ Get-ChildItem -Path . -Filter *.ps1 -Recurse | Unblock-File
 
 ### Automatic elevation
 
-The script automatically checks whether it is running with administrator privileges.  
-If not, it relaunches itself as Administrator.
+The script automatically checks whether it is running with
+administrator privileges. If not, it relaunches itself as
+Administrator.
 
 ### Interactive prompts
 
-Some settings are not forced automatically and instead ask the user for confirmation, for example:
+Some settings are not forced automatically and instead ask the user
+for confirmation, for example:
 
 - X3D CPU power plan handling
 - System Protection
@@ -83,7 +100,8 @@ Some settings are not forced automatically and instead ask the user for confirma
 
 ### Clean terminal output
 
-The script prints structured status messages to show what is happening during execution.
+The script prints structured status messages to show what is
+happening during execution.
 
 ## Included settings
 
@@ -110,12 +128,17 @@ These settings depend on user input:
 
 ## External Tool Integration
 
-At the end of the setup process, this project can optionally launch **Win11Debloat** by **Raphire**.
+At the end of the setup process, this project can optionally launch
+**Win11Debloat** by **Raphire**.
 
-Win11Debloat is a lightweight PowerShell project for decluttering and customizing Windows. According to its repository, it can remove pre-installed apps, disable telemetry, remove intrusive interface elements, and perform other Windows customization changes. It supports both **Windows 10** and **Windows 11**.
+Win11Debloat is a lightweight PowerShell project for decluttering and
+customizing Windows. According to its repository, it can remove
+pre-installed apps, disable telemetry, remove intrusive interface
+elements, and perform other Windows customization changes. It supports
+both **Windows 10** and **Windows 11**.
 
-In this project, Win11Debloat is not bundled directly.  
-Instead, it is started optionally through its official quick-launch command:
+In this project, Win11Debloat is not bundled directly. Instead, it is
+started optionally through its official quick-launch command:
 
 ## Win11Debloat
 
@@ -126,25 +149,30 @@ Instead, it is started optionally through its official quick-launch command:
 ## Ninite
 
 [Ninite](https://ninite.com/) is not bundled with this repository.
-If selected by the user, the script simply opens the official website in the browser.
+If selected by the user, the script opens the official website in
+the browser.
 
 ## BIOS Change Disclaimer
 
 > [!CAUTION]
-> **Do not change BIOS settings unless you understand what they do and are willing to test system stability properly afterward.**
+> **Do not change BIOS settings unless you understand what they do
+> and are willing to test system stability properly afterward.**
 >
-> **If you are unsure, stay close to stock settings or only apply conservative changes.**  
-> **Make adjustments step by step and verify stability after every change.**
+> **If you are unsure, stay close to stock settings or only apply
+> conservative changes.**  
+> **Make adjustments step by step and verify stability after every
+> change.**
 >
 > **This project does not apply BIOS settings automatically.**  
 > **It only provides recommendations for manual review.**
 >
 > **You are fully responsible for any BIOS changes you make.**
 
-The BIOS recommendations referenced by this project are general baseline suggestions only.
+The BIOS recommendations referenced by this project are general
+baseline suggestions only.
 
-They are **not universal safe settings** and should not be applied blindly.  
-BIOS behavior can vary significantly depending on:
+They are **not universal safe settings** and should not be applied
+blindly. BIOS behavior can vary significantly depending on:
 
 - motherboard vendor and BIOS version
 - CPU model
@@ -165,7 +193,8 @@ This is especially important for settings such as:
 - **Secure Boot**
 - **TPM / fTPM**
 
-Some of these changes can improve performance, boot times, temperatures, or noise levels, but they can also introduce:
+Some of these changes can improve performance, boot times,
+temperatures, or noise levels, but they can also introduce:
 
 - failed boots
 - random crashes
