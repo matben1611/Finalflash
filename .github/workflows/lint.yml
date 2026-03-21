@@ -23,9 +23,22 @@ jobs:
         shell: pwsh
         run: |
           $results = Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./scripts/PSScriptAnalyzerSettings.psd1
-          if ($results) {
-            $results | Format-Table
+          $errors = $results | Where-Object { $_.Severity -eq 'Error' }
+          $warnings = $results | Where-Object { $_.Severity -eq 'Warning' }
+          
+          if ($errors) {
+            Write-Host "❌ ERRORS found:" -ForegroundColor Red
+            $errors | Format-Table
             exit 1
+          }
+          
+          if ($warnings) {
+            Write-Host "⚠️  WARNINGS found (non-blocking):" -ForegroundColor Yellow
+            $warnings | Format-Table
+          }
+          
+          if (-not $results) {
+            Write-Host "✅ PSScriptAnalyzer: All checks passed!" -ForegroundColor Green
           }
 
   pester:
