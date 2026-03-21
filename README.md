@@ -37,7 +37,8 @@ by applying predefined system changes through PowerShell.
 The current implementation includes:
 
 - Overview to most important system components
-- Opening relating driver download sites for AMD/NVIDIA
+- Opening relating driver download sites for AMD/NVIDIA GPUs
+- Opening chipset driver download sites based on CPU (Intel/AMD)
 - Creating png with tipps for Bios/Uefi tuning for gaming and
   benchmark perfomance
 - Enabling **Hardware-Accelerated GPU Scheduling**

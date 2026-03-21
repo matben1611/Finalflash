@@ -673,6 +673,100 @@ function Open-GpuDriverPageIfWanted {
     }
 }
 
+function Open-ChipsetsDriverPageIfWanted {
+    Write-Host ""
+    $openChipsetsPage = Read-YesNo -Prompt "Do you want to open the chipset driver download page"
+
+    if (-not $openChipsetsPage) {
+        Write-Info "Chipset driver page was not opened."
+        Write-Host ""
+        return
+    }
+
+    try {
+        $cpu = Get-CimInstance Win32_Processor -ErrorAction Stop |
+            Select-Object -First 1 -ExpandProperty Name
+        $cpuLower = $cpu.ToLowerInvariant()
+
+        if ($cpuLower -match 'intel') {
+            Write-Info "Intel CPU detected."
+            Write-Info "Opening Intel chipset drivers page..."
+            Start-Process "https://www.intel.com/content/www/us/en/download-center/home.html"
+            Write-Ok "Intel chipset driver page opened."
+            Write-Host ""
+            return
+        }
+        elseif ($cpuLower -match 'amd') {
+            Write-Info "AMD CPU detected."
+            Write-Info "Opening AMD chipset drivers page..."
+            Start-Process "https://www.amd.com/en/support/download/drivers.html"
+            Write-Ok "AMD chipset driver page opened."
+            Write-Host ""
+            return
+        }
+        else {
+            Write-WarnMsg "Could not determine CPU manufacturer from: $cpu"
+            Write-Host ""
+
+            while ($true) {
+                $cpuVendor = (Read-Host "Please specify your CPU vendor (Intel/AMD)").Trim().ToLowerInvariant()
+
+                switch ($cpuVendor) {
+                    'intel' {
+                        Write-Info "Opening Intel chipset drivers page..."
+                        Start-Process "https://www.intel.com/content/www/us/en/download-center/home.html"
+                        Write-Ok "Intel chipset driver page opened."
+                        Write-Host ""
+                        return
+                    }
+
+                    'amd' {
+                        Write-Info "Opening AMD chipset drivers page..."
+                        Start-Process "https://www.amd.com/en/support/download/drivers.html"
+                        Write-Ok "AMD chipset driver page opened."
+                        Write-Host ""
+                        return
+                    }
+
+                    default {
+                        Write-Host "Please enter Intel or AMD."
+                    }
+                }
+            }
+        }
+    }
+    catch {
+        Write-WarnMsg "Unable to determine CPU information. Please select manually."
+        Write-Host ""
+
+        while ($true) {
+            $cpuVendor = (Read-Host "Please specify your CPU vendor (Intel/AMD)").Trim().ToLowerInvariant()
+
+            switch ($cpuVendor) {
+                'intel' {
+                    Write-Info "Opening Intel chipset drivers page..."
+                    Start-Process "https://www.intel.com/content/www/us/en/download-center/home.html"
+                    Write-Ok "Intel chipset driver page opened."
+                    Write-Host ""
+                    return
+                }
+
+                'amd' {
+                    Write-Info "Opening AMD chipset drivers page..."
+                    Start-Process "https://www.amd.com/en/support/download/drivers.html"
+                    Write-Ok "AMD chipset driver page opened."
+                    Write-Host ""
+                    return
+                }
+
+                default {
+                    Write-Host "Please enter Intel or AMD."
+                }
+            }
+        }
+    }
+}
+
 try {
     Restart-AsAdmin
 
@@ -698,6 +792,10 @@ try {
     Wait-A-Bit
 
     Open-GpuDriverPageIfWanted
+
+    Wait-A-Bit
+
+    Open-ChipsetsDriverPageIfWanted
 
     Wait-A-Bit
 

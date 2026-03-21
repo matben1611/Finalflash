@@ -97,6 +97,14 @@ Describe "Script Structure" {
         $scriptContent | Should -Match 'function\s+Show-SystemInformation'
     }
 
+    It "Contains Open-GpuDriverPageIfWanted function" {
+        $scriptContent | Should -Match 'function\s+Open-GpuDriverPageIfWanted'
+    }
+
+    It "Contains Open-ChipsetsDriverPageIfWanted function" {
+        $scriptContent | Should -Match 'function\s+Open-ChipsetsDriverPageIfWanted'
+    }
+
     It "Uses Read-YesNo for user confirmations" {
         $scriptContent | Should -Match 'Read-YesNo'
     }
