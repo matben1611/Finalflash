@@ -125,11 +125,43 @@ This script opens relevant Windows settings pages without making changes.
 
 ### Running Tests
 
-Tests are written with [Pester 5.x](https://pester.dev/):
+All linting and testing commands for local development:
+
+#### 1. Pester Unit Tests
+
+Tests are written with [Pester 5.7.1](https://pester.dev/):
 
 ```powershell
 Remove-Module Pester -Force -ErrorAction SilentlyContinue
-Invoke-Pester -Path ./tests -PassThru
+Invoke-Pester -Path ./tests -Output Detailed
+```
+
+#### 2. PSScriptAnalyzer Code Analysis
+
+Code quality and PowerShell best practices:
+
+```powershell
+Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./scripts/PSScriptAnalyzerSettings.psd1
+```
+
+#### 3. Markdown Linting
+
+Documentation formatting and consistency (requires Node.js/npm):
+
+```powershell
+npm install -g markdownlint-cli
+markdownlint -c .markdownlint.json .
+```
+
+#### Run All Tests
+
+Run all three checks at once:
+
+```powershell
+Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./scripts/PSScriptAnalyzerSettings.psd1; `
+Remove-Module Pester -Force -ErrorAction SilentlyContinue; `
+Invoke-Pester -Path ./tests -Output Detailed; `
+markdownlint -c .markdownlint.json .
 ```
 
 ### Code Analysis
