@@ -26,6 +26,7 @@ This script helps reduce that repetitive work by applying predefined system chan
 
 The current implementation includes:
 
+- Overview to most important system components
 - Opening relating driver download sites for AMD/NVIDIA
 - Creating png with tipps for Bios/Uefi tuning for gaming and benchmark perfomance
 - Enabling **Hardware-Accelerated GPU Scheduling**
