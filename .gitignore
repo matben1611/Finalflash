@@ -22,3 +22,4 @@ node_modules/
 *.bak
 *.tmp
 *~
+.claude/settings.local.json
