@@ -468,12 +468,12 @@ function Set-HardwareAcceleratedGpuSchedulingOn {
     Write-Host ""
 }
 
-function Set-VariableRefreshRateOff {
+function Set-VariableRefreshRateOn {
     Write-Host ""
-    $disableVrr = Read-YesNo -Prompt "Do you want to disable Variable Refresh Rate"
+    $enableVrr = Read-YesNo -Prompt "Do you want to enable Variable Refresh Rate"
 
-    if ($disableVrr) {
-        Write-Info "Disabling Variable Refresh Rate..."
+    if ($enableVrr) {
+        Write-Info "Enabling Variable Refresh Rate..."
 
         $path = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
         $name = 'DirectXUserGlobalSettings'
@@ -500,7 +500,7 @@ function Set-VariableRefreshRateOff {
             }
         }
 
-        $map['VRROptimizeEnable'] = '0'
+        $map['VRROptimizeEnable'] = '1'
 
         $newValue = (($map.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ';') + ';'
 
@@ -1026,7 +1026,7 @@ try {
     Open-GpuDriverPageIfWanted
     Open-ChipsetsDriverPageIfWanted
     Set-HardwareAcceleratedGpuSchedulingOn 
-    Set-VariableRefreshRateOff 
+    Set-VariableRefreshRateOn 
     Set-GameModeOff
     Set-PowerPlan
     Set-MouseAccelerationOff

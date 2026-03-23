@@ -81,8 +81,8 @@ Describe "Script Structure" {
         $scriptContent | Should -Match 'function\s+Set-HardwareAcceleratedGpuSchedulingOn'
     }
 
-    It "Contains Set-VariableRefreshRateOff function" {
-        $scriptContent | Should -Match 'function\s+Set-VariableRefreshRateOff'
+    It "Contains Set-VariableRefreshRateOn function" {
+        $scriptContent | Should -Match 'function\s+Set-VariableRefreshRateOn'
     }
 
     It "Contains Set-GameModeOff function" {
