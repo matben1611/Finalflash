@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD013 -->
 
 # afterflash
 
@@ -318,3 +319,79 @@ temperatures, or noise levels, but they can also introduce:
 - game instability
 - sleep / idle instability
 - rare data corruption
+
+## Git Commit Signing Setup (Windows PowerShell)
+
+This guide shows how to create a signed Git commit on Windows using an **ED25519 SSH key**.
+Follow all steps to ensure commits are **Verified on GitHub**.
+
+---
+
+## 1. Check if an SSH key already exists
+
+```powershell
+  ls $env:USERPROFILE\.ssh\id_ed25519
+
+  If it exists, skip to step 3.
+  If not, create a new key:
+
+  ssh-keygen -t ed25519 -C "your_email@example.com"
+  # Save to $env:USERPROFILE\.ssh\id_ed25519
+  # Optional: Set a passphrase
+```
+
+## 1. Generate the Public Key
+
+```powershell
+
+  ssh-keygen -y -f $env:USERPROFILE\.ssh\id_ed25519 > $env:USERPROFILE\.ssh\id_ed25519.pub
+
+```
+
+## 2. Check the files
+
+```powershell
+  ls $env:USERPROFILE\.ssh\
+  type $env:USERPROFILE\.ssh\id_ed25519.pub
+```
+
+Copy the entire contents of id_ed25519.pub for GitHub and allowed_signers.
+
+## 3. Start the SSH-Agent and add your private key
+
+  Run PowerShell as Administrator
+
+```powershell
+  Set-Service ssh-agent -StartupType Manual
+  Start-Service ssh-agent
+  ssh-add $env:USERPROFILE\.ssh\id_ed25519
+```
+
+## 4. Configure Git for commit signing
+
+```powershell
+  git config --global gpg.format ssh
+  git config --global user.signingkey $env:USERPROFILE\.ssh\id_ed25519
+  git config --global commit.gpgsign true
+```
+
+## 5. Create allowed_signers file (for local verification)
+
+```powershell
+  notepad $env:USERPROFILE\.ssh\allowed_signers
+```
+
+Paste your public key inside
+Save and close. Then tell Git:
+
+```powershell
+git config --global gpg.ssh.allowedSignersFile $env:USERPROFILE\.ssh\allowed_signers
+```
+
+## 6. Add the Public Key to GitHub
+
+  Go to GitHub SSH and GPG keys
+  Click New SSH Key → Signing Key
+  Paste your public key and save
+
+Only then will GitHub mark your commits as Verified.
