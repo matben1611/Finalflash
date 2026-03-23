@@ -1,22 +1,20 @@
 param()
 
-$scriptsDir  = Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts'
-$modulesDir  = Join-Path $scriptsDir 'modules'
+BeforeAll {
+    $script:scriptsDir = Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts'
+    $script:modulesDir = Join-Path $script:scriptsDir 'modules'
+}
 
 Describe "setup.ps1 Validation" {
 
-    BeforeAll {
-        $SetupScriptPath = Join-Path $scriptsDir 'setup.ps1'
-    }
-
     It "Script exists" {
-        Test-Path -Path $SetupScriptPath | Should -Be $true
+        Test-Path (Join-Path $script:scriptsDir 'setup.ps1') | Should -Be $true
     }
 
     It "Script has valid PowerShell syntax" {
         $errors = @()
         $null = [System.Management.Automation.PSParser]::Tokenize(
-            (Get-Content -Path $SetupScriptPath -Raw),
+            (Get-Content (Join-Path $script:scriptsDir 'setup.ps1') -Raw),
             [ref]$errors
         )
         $errors.Count | Should -Be 0
@@ -25,7 +23,7 @@ Describe "setup.ps1 Validation" {
     It "Script can be parsed without execution" {
         {
             [void]([System.Management.Automation.PSParser]::Tokenize(
-                (Get-Content -Path $SetupScriptPath -Raw),
+                (Get-Content (Join-Path $script:scriptsDir 'setup.ps1') -Raw),
                 [ref]@()
             ))
         } | Should -Not -Throw
@@ -34,26 +32,43 @@ Describe "setup.ps1 Validation" {
 
 Describe "Module Syntax Validation" {
 
-    $moduleFiles = @('helpers.ps1', 'system.ps1', 'tweaks.ps1', 'apps.ps1')
+    It "modules\helpers.ps1 has valid PowerShell syntax" {
+        $path = Join-Path $script:modulesDir 'helpers.ps1'
+        Test-Path $path | Should -Be $true
+        $errors = @()
+        $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $path -Raw), [ref]$errors)
+        $errors.Count | Should -Be 0
+    }
 
-    foreach ($file in $moduleFiles) {
-        It "modules\$file has valid PowerShell syntax" {
-            $path = Join-Path $modulesDir $file
-            Test-Path $path | Should -Be $true
-            $errors = @()
-            $null = [System.Management.Automation.PSParser]::Tokenize(
-                (Get-Content -Path $path -Raw),
-                [ref]$errors
-            )
-            $errors.Count | Should -Be 0
-        }
+    It "modules\system.ps1 has valid PowerShell syntax" {
+        $path = Join-Path $script:modulesDir 'system.ps1'
+        Test-Path $path | Should -Be $true
+        $errors = @()
+        $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $path -Raw), [ref]$errors)
+        $errors.Count | Should -Be 0
+    }
+
+    It "modules\tweaks.ps1 has valid PowerShell syntax" {
+        $path = Join-Path $script:modulesDir 'tweaks.ps1'
+        Test-Path $path | Should -Be $true
+        $errors = @()
+        $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $path -Raw), [ref]$errors)
+        $errors.Count | Should -Be 0
+    }
+
+    It "modules\apps.ps1 has valid PowerShell syntax" {
+        $path = Join-Path $script:modulesDir 'apps.ps1'
+        Test-Path $path | Should -Be $true
+        $errors = @()
+        $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $path -Raw), [ref]$errors)
+        $errors.Count | Should -Be 0
     }
 }
 
 Describe "Script Structure" {
 
     BeforeAll {
-        $script:allContent = (Get-ChildItem -Path $modulesDir -Filter '*.ps1') |
+        $script:allContent = (Get-ChildItem -Path $script:modulesDir -Filter '*.ps1') |
             ForEach-Object { Get-Content $_.FullName -Raw } |
             Out-String
     }
@@ -138,7 +153,7 @@ Describe "Script Structure" {
 Describe "setup.ps1 Orchestration" {
 
     BeforeAll {
-        $script:setupContent = Get-Content (Join-Path $scriptsDir 'setup.ps1') -Raw
+        $script:setupContent = Get-Content (Join-Path $script:scriptsDir 'setup.ps1') -Raw
     }
 
     It "Dot-sources all modules" {
