@@ -459,16 +459,21 @@ function Set-DnsServers {
         return
     }
 
-    Write-Host ""
-    Write-Host "  1. Cloudflare (1.1.1.1 / 1.0.0.1) - Fast, privacy-focused"
-    Write-Host "  2. Google    (8.8.8.8 / 8.8.4.4)  - Reliable, widely used"
-    Write-Host ""
+    if ($script:quickSetup) {
+        $choice = '1'
+    }
+    else {
+        Write-Host ""
+        Write-Host "  1. Cloudflare (1.1.1.1 / 1.0.0.1) - Fast, privacy-focused"
+        Write-Host "  2. Google    (8.8.8.8 / 8.8.4.4)  - Reliable, widely used"
+        Write-Host ""
 
-    $choice = ""
-    while ($choice -ne '1' -and $choice -ne '2') {
-        $choice = (Read-Host "  Select DNS provider (1/2)").Trim()
-        if ($choice -ne '1' -and $choice -ne '2') {
-            Write-Host "  Please enter 1 or 2."
+        $choice = ""
+        while ($choice -ne '1' -and $choice -ne '2') {
+            $choice = (Read-Host "  Select DNS provider (1/2)").Trim()
+            if ($choice -ne '1' -and $choice -ne '2') {
+                Write-Host "  Please enter 1 or 2."
+            }
         }
     }
 

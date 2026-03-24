@@ -80,6 +80,13 @@ function Read-YesNo {
         [string]$Prompt
     )
 
+    if ($script:quickSetup) {
+        Write-Host "$Prompt (Yes/No): Yes"
+        Write-Host ""
+        Write-Host ""
+        return $true
+    }
+
     while ($true) {
         $answer = (Read-Host "$Prompt (Yes/No)").Trim().ToLowerInvariant()
 

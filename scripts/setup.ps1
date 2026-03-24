@@ -10,15 +10,23 @@ $modulesDir = Join-Path $PSScriptRoot 'modules'
 . "$modulesDir\tweaks.ps1"
 . "$modulesDir\apps.ps1"
 
+$script:quickSetup  = $false
 $script:currentStep = 0
 $script:totalSteps  = 28
 
 function Invoke-Step {
     param(
         [Parameter(Mandatory)][string]$Label,
-        [Parameter(Mandatory)][scriptblock]$Body
+        [Parameter(Mandatory)][scriptblock]$Body,
+        [switch]$SkipInQuickSetup
     )
     $script:currentStep++
+
+    if ($script:quickSetup -and $SkipInQuickSetup) {
+        Write-Host "  [$script:currentStep/$script:totalSteps] $Label (skipped)" -ForegroundColor DarkGray
+        return
+    }
+
     Write-Host "  [$script:currentStep/$script:totalSteps] $Label" -ForegroundColor Cyan
     & $Body
     Wait-A-Bit
@@ -47,34 +55,38 @@ try {
 
     Wait-A-Bit
 
+    Write-Host ""
+    $script:quickSetup = Read-YesNo -Prompt "Do you want to use Quick Setup (applies all tweaks automatically)"
+    Write-Host ""
+
     Invoke-Step 'BIOS Recommendations'       { Set-BiosRecommendationsFileIfWanted }
-    Invoke-Step 'App Installer (Ninite)'    { Open-NiniteIfWanted }
-    Invoke-Step 'GPU Drivers'               { Open-GpuDriverPageIfWanted }
-    Invoke-Step 'DDU'                       { Open-DduPageIfWanted }
-    Invoke-Step 'Chipset Drivers'           { Open-ChipsetsDriverPageIfWanted }
-    Invoke-Step 'Monitoring Tools'          { Open-MonitoringToolsIfWanted }
-    Invoke-Step 'CrystalDiskMark'           { Open-CrystalDiskMarkIfWanted }
-    Invoke-Step 'GPU Scheduling'            { Set-HardwareAcceleratedGpuSchedulingOn }
-    Invoke-Step 'Variable Refresh Rate'     { Set-VariableRefreshRateOn }
-    Invoke-Step 'Game Mode'                 { Set-GameModeOff }
-    Invoke-Step 'Xbox Game Bar'             { Set-XboxGameBarOff }
-    Invoke-Step 'Fullscreen Optimizations'  { Set-FullscreenOptimizationsOff }
-    Invoke-Step 'Timer Resolution'          { Set-TimerResolution }
-    Invoke-Step 'MSI Mode'                  { Set-MsiModeForGpu }
-    Invoke-Step 'Power Plan'                { Set-PowerPlan }
-    Invoke-Step 'Mouse Acceleration'        { Set-MouseAccelerationOff }
-    Invoke-Step 'File Extensions'           { Set-FileExtensionsVisible }
-    Invoke-Step 'Hidden Files'              { Set-HiddenFilesVisible }
-    Invoke-Step 'Dark Mode'                 { Set-DarkModeOn }
-    Invoke-Step 'Diagnostic Data'           { Set-OptionalDiagnosticDataOff }
-    Invoke-Step 'Delivery Optimization'     { Set-DeliveryOptimizationHttpOnly }
-    Invoke-Step 'DNS'                       { Set-DnsServers }
-    Invoke-Step 'NIC Power Saving'          { Set-NicPowerSavingOff }
-    Invoke-Step 'System Protection'         { Set-SystemProtectionIfWanted }
-    Invoke-Step 'Clipboard History'         { Set-ClipboardHistoryIfWanted }
-    Invoke-Step 'Do Not Disturb'            { Test-DoNotDisturbIfWanted }
-    Invoke-Step 'Windows Update'            { Start-WindowsUpdateIfWanted }
-    Invoke-Step 'Debloater'                 { Start-DebloaterIfWanted }
+    Invoke-Step 'App Installer (Ninite)'     { Open-NiniteIfWanted }          -SkipInQuickSetup
+    Invoke-Step 'GPU Drivers'                { Open-GpuDriverPageIfWanted }   -SkipInQuickSetup
+    Invoke-Step 'DDU'                        { Open-DduPageIfWanted }          -SkipInQuickSetup
+    Invoke-Step 'Chipset Drivers'            { Open-ChipsetsDriverPageIfWanted } -SkipInQuickSetup
+    Invoke-Step 'Monitoring Tools'           { Open-MonitoringToolsIfWanted }  -SkipInQuickSetup
+    Invoke-Step 'CrystalDiskMark'            { Open-CrystalDiskMarkIfWanted }  -SkipInQuickSetup
+    Invoke-Step 'GPU Scheduling'             { Set-HardwareAcceleratedGpuSchedulingOn }
+    Invoke-Step 'Variable Refresh Rate'      { Set-VariableRefreshRateOn }
+    Invoke-Step 'Game Mode'                  { Set-GameModeOff }
+    Invoke-Step 'Xbox Game Bar'              { Set-XboxGameBarOff }
+    Invoke-Step 'Fullscreen Optimizations'   { Set-FullscreenOptimizationsOff }
+    Invoke-Step 'Timer Resolution'           { Set-TimerResolution }
+    Invoke-Step 'MSI Mode'                   { Set-MsiModeForGpu }
+    Invoke-Step 'Power Plan'                 { Set-PowerPlan }
+    Invoke-Step 'Mouse Acceleration'         { Set-MouseAccelerationOff }
+    Invoke-Step 'File Extensions'            { Set-FileExtensionsVisible }
+    Invoke-Step 'Hidden Files'               { Set-HiddenFilesVisible }
+    Invoke-Step 'Dark Mode'                  { Set-DarkModeOn }
+    Invoke-Step 'Diagnostic Data'            { Set-OptionalDiagnosticDataOff }
+    Invoke-Step 'Delivery Optimization'      { Set-DeliveryOptimizationHttpOnly }
+    Invoke-Step 'DNS'                        { Set-DnsServers } -SkipInQuickSetup
+    Invoke-Step 'NIC Power Saving'           { Set-NicPowerSavingOff }
+    Invoke-Step 'System Protection'          { Set-SystemProtectionIfWanted } -SkipInQuickSetup
+    Invoke-Step 'Clipboard History'          { Set-ClipboardHistoryIfWanted }
+    Invoke-Step 'Do Not Disturb'             { Test-DoNotDisturbIfWanted }
+    Invoke-Step 'Windows Update'             { Start-WindowsUpdateIfWanted } -SkipInQuickSetup
+    Invoke-Step 'Debloater'                  { Start-DebloaterIfWanted }
 
     Write-Host ""
     Write-Host "========================================"
