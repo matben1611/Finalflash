@@ -1,19 +1,44 @@
 [CmdletBinding()]
-param()
-
-$ErrorActionPreference = 'Stop'
-
-$toolsDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-$root     = Split-Path -Parent $toolsDir
-
-$batFile = Join-Path $root 'afterflash-standalone.bat'
-$pngFile = Join-Path $root 'assets\afterflash.png'
-$ps1File = Join-Path $root 'afterflash-standalone.ps1'
-$icoFile = Join-Path $root 'afterflash.ico'
-$exeFile = Join-Path $root 'afterflash.exe'
+param(
+    [switch]$Force
+)
 
 try {
-    # --- 0. Check if exe is locked ---
+    $ErrorActionPreference = 'Stop'
+
+    $toolsDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+    $root     = Split-Path -Parent $toolsDir
+
+    $batFile     = Join-Path $root 'afterflash-standalone.bat'
+    $pngFile     = Join-Path $root 'assets\afterflash.png'
+    $versionFile = Join-Path $root 'VERSION'
+    $ps1File     = Join-Path $root 'afterflash-standalone.ps1'
+    $icoFile     = Join-Path $root 'afterflash.ico'
+    # --- 0. Read version ---
+    if (-not (Test-Path $versionFile)) {
+        throw "VERSION file not found at $versionFile"
+    }
+    $version = (Get-Content $versionFile -Raw).Trim()
+    $exeFile = Join-Path $root "afterflash-$version.exe"
+    Write-Host "Version: $version"
+    Write-Host ""
+
+    # --- 1. Check if rebuild is needed ---
+    if (-not $Force -and (Test-Path $exeFile)) {
+        $batTime = (Get-Item $batFile).LastWriteTime
+        $exeTime = (Get-Item $exeFile).LastWriteTime
+
+        if ($exeTime -ge $batTime) {
+            Write-Host "EXE is up to date (bat: $($batTime.ToString('yyyy-MM-dd HH:mm:ss')), exe: $($exeTime.ToString('yyyy-MM-dd HH:mm:ss')))"
+            Write-Host "Use -Force to rebuild anyway."
+            return
+        }
+
+        Write-Host "BAT is newer than EXE — rebuilding..."
+        Write-Host ""
+    }
+
+    # --- 2. Check if exe is locked ---
     if (Test-Path $exeFile) {
         try {
             $stream = [System.IO.File]::Open($exeFile, 'Open', 'ReadWrite', 'None')
@@ -23,7 +48,7 @@ try {
         }
     }
 
-    # --- 1. Extract PS code from bat ---
+    # --- 3. Extract PS code from bat ---
     Write-Host "[1/4] Extracting PowerShell code from bat..."
     $lines = Get-Content $batFile
     $startIndex = $null
@@ -40,7 +65,7 @@ try {
     Set-Content -Path $ps1File -Value $psContent -Encoding UTF8
     Write-Host "    -> $ps1File"
 
-    # --- 2. Convert PNG to ICO ---
+    # --- 4. Convert PNG to ICO ---
     Write-Host "[2/4] Converting PNG to ICO..."
     Add-Type -AssemblyName System.Drawing
 
@@ -74,7 +99,7 @@ try {
 
     Write-Host "    -> $icoFile"
 
-    # --- 3. Install PS2EXE if needed ---
+    # --- 5. Install PS2EXE if needed ---
     Write-Host "[3/4] Checking PS2EXE..."
     if (-not (Get-Module -ListAvailable -Name PS2EXE)) {
         Write-Host "    PS2EXE not found, installing..."
@@ -82,7 +107,7 @@ try {
     }
     Import-Module PS2EXE
 
-    # --- 4. Compile to EXE ---
+    # --- 6. Compile to EXE ---
     Write-Host "[4/4] Compiling to EXE..."
     Invoke-PS2EXE `
         -InputFile    $ps1File `
@@ -90,6 +115,7 @@ try {
         -iconFile     $icoFile `
         -title        'afterflash' `
         -description  'Windows Setup & Optimizer' `
+        -version      $version `
         -requireAdmin `
         -verbose
 
@@ -98,7 +124,7 @@ try {
     Remove-Item -Path $icoFile -ErrorAction SilentlyContinue
 
     Write-Host ""
-    Write-Host "Done: $exeFile"
+    Write-Host "Done: $exeFile ($version)"
 }
 catch {
     Write-Host ""
