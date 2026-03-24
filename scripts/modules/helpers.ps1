@@ -6,7 +6,17 @@ function Test-IsAdmin {
 
 function Wait-A-Bit {
     $seconds = Get-Random -Minimum 1 -Maximum 3
-    Start-Sleep -Seconds $seconds
+    $totalMs = $seconds * 1000
+    $frames  = @('|', '/', '-', '\')
+    $frameMs = 80
+    $ticks   = [math]::Ceiling($totalMs / $frameMs)
+
+    for ($i = 0; $i -lt $ticks; $i++) {
+        $frame = $frames[$i % $frames.Count]
+        Write-Host -NoNewline "`r  $frame  "
+        Start-Sleep -Milliseconds $frameMs
+    }
+    Write-Host "`r     "
 }
 
 function Restart-AsAdmin {

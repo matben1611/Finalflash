@@ -10,9 +10,19 @@ $modulesDir = Join-Path $PSScriptRoot 'modules'
 . "$modulesDir\tweaks.ps1"
 . "$modulesDir\apps.ps1"
 
-$Host.UI.RawUI.BackgroundColor = 'Black'
-$Host.UI.RawUI.ForegroundColor = 'White'
-Clear-Host
+$script:currentStep = 0
+$script:totalSteps  = 16
+
+function Invoke-Step {
+    param(
+        [Parameter(Mandatory)][string]$Label,
+        [Parameter(Mandatory)][scriptblock]$Body
+    )
+    $script:currentStep++
+    Write-Host "  [$script:currentStep/$script:totalSteps] $Label" -ForegroundColor Cyan
+    & $Body
+    Wait-A-Bit
+}
 
 try {
     Restart-AsAdmin
@@ -28,37 +38,27 @@ try {
     Write-Host ""
 
     Wait-A-Bit
-    Wait-A-Bit
 
     Show-SystemInformation
 
     Wait-A-Bit
 
-    Set-BiosRecommendationsFileIfWanted
-    Open-NiniteIfWanted
-    Open-GpuDriverPageIfWanted
-    Open-ChipsetsDriverPageIfWanted
-    Set-HardwareAcceleratedGpuSchedulingOn
-    Set-VariableRefreshRateOn
-    Set-GameModeOff
-    Set-PowerPlan
-    Set-MouseAccelerationOff
-    Set-OptionalDiagnosticDataOff
-    Set-DeliveryOptimizationHttpOnly
-    Set-SystemProtectionIfWanted
-    Set-ClipboardHistoryIfWanted
-    Test-DoNotDisturbIfWanted
-
-    Write-Host ""
-    Write-Host "========================================"
-    Write-Host "          Settings Applied              "
-    Write-Host "========================================"
-    Write-Host ""
-
-    Start-WindowsUpdateIfWanted
-    Wait-A-Bit
-    Start-DebloaterIfWanted
-    Wait-A-Bit
+    Invoke-Step 'BIOS Recommendations'    { Set-BiosRecommendationsFileIfWanted }
+    Invoke-Step 'App Installer (Ninite)'  { Open-NiniteIfWanted }
+    Invoke-Step 'GPU Drivers'             { Open-GpuDriverPageIfWanted }
+    Invoke-Step 'Chipset Drivers'         { Open-ChipsetsDriverPageIfWanted }
+    Invoke-Step 'GPU Scheduling'          { Set-HardwareAcceleratedGpuSchedulingOn }
+    Invoke-Step 'Variable Refresh Rate'   { Set-VariableRefreshRateOn }
+    Invoke-Step 'Game Mode'               { Set-GameModeOff }
+    Invoke-Step 'Power Plan'              { Set-PowerPlan }
+    Invoke-Step 'Mouse Acceleration'      { Set-MouseAccelerationOff }
+    Invoke-Step 'Diagnostic Data'         { Set-OptionalDiagnosticDataOff }
+    Invoke-Step 'Delivery Optimization'   { Set-DeliveryOptimizationHttpOnly }
+    Invoke-Step 'System Protection'       { Set-SystemProtectionIfWanted }
+    Invoke-Step 'Clipboard History'       { Set-ClipboardHistoryIfWanted }
+    Invoke-Step 'Do Not Disturb'          { Test-DoNotDisturbIfWanted }
+    Invoke-Step 'Windows Update'          { Start-WindowsUpdateIfWanted }
+    Invoke-Step 'Debloater'               { Start-DebloaterIfWanted }
 
     Write-Host ""
     Write-Host "========================================"
