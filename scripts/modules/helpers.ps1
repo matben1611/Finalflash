@@ -1,3 +1,15 @@
+function Write-Typewriter {
+    param(
+        [Parameter(Mandatory)][string]$Text,
+        [int]$DelayMs = 35
+    )
+    foreach ($char in $Text.ToCharArray()) {
+        Write-Host -NoNewline $char
+        Start-Sleep -Milliseconds $DelayMs
+    }
+    Write-Host ""
+}
+
 function Test-IsAdmin {
     $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)

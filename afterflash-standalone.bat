@@ -22,6 +22,18 @@ function Test-IsAdmin {
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+function Write-Typewriter {
+    param(
+        [Parameter(Mandatory)][string]$Text,
+        [int]$DelayMs = 35
+    )
+    foreach ($char in $Text.ToCharArray()) {
+        Write-Host -NoNewline $char
+        Start-Sleep -Milliseconds $DelayMs
+    }
+    Write-Host ""
+}
+
 function Wait-A-Bit {
     $seconds = Get-Random -Minimum 1 -Maximum 3
     $totalMs = $seconds * 1000
@@ -1055,6 +1067,10 @@ try {
     Write-Host ""
 
     Wait-A-Bit
+
+    Write-Host ""
+    Write-Typewriter "  Scanning system hardware..." -DelayMs 40
+    Start-Sleep -Milliseconds 400
 
     Show-SystemInformation
 

@@ -39,6 +39,10 @@ try {
 
     Wait-A-Bit
 
+    Write-Host ""
+    Write-Typewriter "  Scanning system hardware..." -DelayMs 40
+    Start-Sleep -Milliseconds 400
+
     Show-SystemInformation
 
     Wait-A-Bit
